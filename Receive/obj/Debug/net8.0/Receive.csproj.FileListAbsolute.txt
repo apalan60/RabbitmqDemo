@@ -15,3 +15,4 @@ C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Receive\obj\Debug\net8.0\refint
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Receive\obj\Debug\net8.0\Receive.pdb
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Receive\obj\Debug\net8.0\Receive.genruntimeconfig.cache
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Receive\obj\Debug\net8.0\ref\Receive.dll
+C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Receive\obj\Debug\net8.0\Receive.sourcelink.json

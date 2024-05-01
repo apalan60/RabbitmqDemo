@@ -15,3 +15,4 @@ C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Send\obj\Debug\net8.0\refint\Se
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Send\obj\Debug\net8.0\Send.pdb
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Send\obj\Debug\net8.0\Send.genruntimeconfig.cache
 C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Send\obj\Debug\net8.0\ref\Send.dll
+C:\Users\User\SideProjects\Rabbitmq\RabbitmqDemo\Send\obj\Debug\net8.0\Send.sourcelink.json
