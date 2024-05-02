@@ -23,12 +23,19 @@ consumer.Received += (_, ea) =>
     var body = ea.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);
     Console.WriteLine($" [x] Received {message}");
+    
+    //fake a second of work for every dot in the message body.
+    int dots = message.Split('.').Length - 1;
+    Thread.Sleep(dots * 1000);
+    Console.WriteLine(" [x] Done");
 };
 
 //Consume the message
 channel.BasicConsume(queue: "queue.consoleApp.Client1",
-    autoAck: true, 
+    autoAck: false, 
     consumer: consumer);
                      
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
+
+

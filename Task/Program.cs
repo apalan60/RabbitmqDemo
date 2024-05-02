@@ -22,11 +22,9 @@ channel.QueueDeclare(
     autoDelete: false,
     arguments: null);
 
-const string message = """
-                       {
-                           "First message": "Hello Rabbitmq",
-                       }
-                       """;
+//Get message from command line arguments
+var message = GetMessage(args);
+
 var body = Encoding.UTF8.GetBytes(message);
 
 channel.BasicPublish(
@@ -39,4 +37,11 @@ Console.WriteLine($"[x] Sent {message} to queue");
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
 
-//working on login failed
+
+
+
+
+static string GetMessage(string[] args)
+{
+    return args.Length > 0 ? string.Join(" ", args) : "Hello World!";
+}
