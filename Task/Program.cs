@@ -16,21 +16,28 @@ using var channel = connection.CreateModel();
 
 //Publish message to queue
 channel.QueueDeclare(
-    queue: "queue.consoleApp.Client1", 
+    queue: "queue.Task.Publisher1", 
     durable: true,
     exclusive: false,
     autoDelete: false,
     arguments: null);
+
+{
+    channel.BasicQos(0, 1, false);
+}
 
 //Get message from command line arguments
 var message = GetMessage(args);
 
 var body = Encoding.UTF8.GetBytes(message);
 
+var properties = channel.CreateBasicProperties();
+properties.Persistent = false;
+
 channel.BasicPublish(
     exchange: string.Empty, //default exchange
-    routingKey: "queue.consoleApp.Client1",
-    basicProperties: null,
+    routingKey: "queue.Task.Publisher1",
+    basicProperties: properties,
     body: body);
 
 Console.WriteLine($"[x] Sent {message} to queue");
