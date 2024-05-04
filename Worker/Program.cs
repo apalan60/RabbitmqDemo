@@ -8,11 +8,12 @@ using var channel = connection.CreateModel();
 
 // declare the queue from which we're going to consume
 channel.QueueDeclare(
-    queue: "queue.consoleApp.Client1",
+    queue: "queue.Task.Publisher1",
     durable: true,
     exclusive: false,
     autoDelete: false,
     arguments: null);
+
 
 Console.WriteLine(" [*] Waiting for messages.");
 
@@ -31,7 +32,7 @@ consumer.Received += (_, ea) =>
 };
 
 //Consume the message
-channel.BasicConsume(queue: "queue.consoleApp.Client1",
+channel.BasicConsume(queue: "queue.Task.Publisher1",
     autoAck: false, 
     consumer: consumer);
                      

@@ -38,5 +38,3 @@ channel.BasicPublish(
 Console.WriteLine($"[x] Sent {message} to queue");
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();
-
-//working on login failed
