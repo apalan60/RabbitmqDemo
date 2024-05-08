@@ -1,0 +1,6 @@
+cd ReceiveLogs
+dotnet run > logs_from_rabbit.log
+
+
+cd ReceiveLogs
+dotnet run
