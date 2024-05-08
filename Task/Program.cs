@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 var factory = new ConnectionFactory
 {
     HostName = "localhost"
-    // Uri = new Uri("amqp://guset:guest@localhost:5672"),
+    // Uri = new Uri("amqp://guest:guest@localhost:5672"),
     // ClientProvidedName = "Rabbitmq Demo app server"  
 };
 using var connection = factory.CreateConnection();
