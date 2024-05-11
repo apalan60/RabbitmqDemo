@@ -1,3 +1,7 @@
 cd EmitLogTopic
+#emit a log with a routing key "kern.critical" 
 dotnet run "kern.critical" "A critical kernel error"
 
+cd ReceiveLogsTopic
+# 接收kern.information相關資訊
+dotnet run "kern.Information.#"

@@ -6,6 +6,7 @@ cd ReceiveLogsTopic
 dotnet run "kern.*"
 
 cd ReceiveLogsTopic
+# 接收Critical logs
 dotnet run "*.critical"
 
 
