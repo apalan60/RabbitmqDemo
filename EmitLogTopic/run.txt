@@ -1,0 +1,3 @@
+cd EmitLogTopic
+dotnet run "kern.critical" "A critical kernel error"
+

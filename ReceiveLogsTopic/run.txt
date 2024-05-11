@@ -1,0 +1,15 @@
+cd ReceiveLogsTopic
+# 接收所有logs
+dotnet run "#"
+
+cd ReceiveLogsTopic
+dotnet run "kern.*"
+
+cd ReceiveLogsTopic
+dotnet run "*.critical"
+
+
+cd ReceiveLogsTopic
+dotnet run "kern.*" "*.critical"
+
+
