@@ -1,0 +1,5 @@
+cd EmitLogDirect
+dotnet run error "Error message."
+# => [x] Sent 'error':'Error message.'
+
+

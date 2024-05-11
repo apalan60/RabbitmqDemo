@@ -1,0 +1,10 @@
+設定要接受哪些RoutingKey的訊息，並將結果輸出於logs_from_rabbit.log
+
+cd ReceiveLogsDirect
+dotnet run warning error > logs_from_rabbit.log
+# => 接收所有的error和warning訊息
+
+
+cd ReceiveLogsDirect
+dotnet run info warning error
+# => 接收所有的info訊息
