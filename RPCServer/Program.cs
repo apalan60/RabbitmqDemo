@@ -16,7 +16,7 @@ channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 const string queueName = "rpc_queue";
 
 var consumer = new EventingBasicConsumer(channel);
-consumer.Received += (model, ea) =>
+consumer.Received += (_, ea) =>
 {
     string response = string.Empty;
     
