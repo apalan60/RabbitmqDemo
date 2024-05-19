@@ -8,6 +8,7 @@ namespace RPCClient;
 public class RpcClient : IDisposable
 {
     private readonly IModel _channel;
+    private readonly IConnection _connection;
     
     //TaskCompletionSource is a helper class that makes it easy to create a task that can be completed from the outside.
     private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper = new();
@@ -16,8 +17,8 @@ public class RpcClient : IDisposable
     public RpcClient()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
-        using var connection = factory.CreateConnection();
-        _channel = connection.CreateModel();
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
         _replyQueueName = _channel.QueueDeclare().QueueName;
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += (_, ea) =>
@@ -65,7 +66,7 @@ public class RpcClient : IDisposable
     
     public void Dispose()
     {
-        throw new NotImplementedException();
+        _connection.Close();
     }
 }
 
