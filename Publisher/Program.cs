@@ -1,6 +1,10 @@
 ﻿using System.Text;
 using RabbitMQ.Client;
 
+
+const string exchange = "ex.messages";
+const string queue = "q.messages";
+
 var factory = new ConnectionFactory
 {
     HostName = "localhost"
@@ -8,22 +12,14 @@ var factory = new ConnectionFactory
 using var connection = factory.CreateConnection();
 using var channel = connection.CreateModel();     
 
-const string exchange = "ex.messages";
-channel.ExchangeDeclare(exchange, ExchangeType.Direct);
-
-channel.QueueDeclare(
-    queue: "q.messages",
-    durable: true,
-    exclusive: false,
-    autoDelete: false,
-    arguments: null);
+//channel.ExchangeDeclare(exchange, ExchangeType.Direct);
 
 var message = GetMessage(args);
 var body = Encoding.UTF8.GetBytes(message);
 
 channel.BasicPublish(
     exchange: exchange,
-    routingKey: string.Empty,
+    routingKey: queue,
     basicProperties: null,
     body: body);
 
@@ -34,5 +30,5 @@ Console.ReadLine();
 
 static string GetMessage(string[] args)
 {
-    return args.Length > 0 ? string.Join(" ", args) : "reject this message";
+    return args.Length > 0 ? string.Join(" ", args) : "Reject this message";
 }
