@@ -8,8 +8,8 @@ public class Consumer : IDisposable
 {
     private readonly IModel _channel;
     private readonly IConnection _connection;
-    private const string Exchange = "ex.messages";
     private const string Queue = "q.messages";
+    private const string DeadLetterExchange = "dead_letter_exchange";
 
     private Consumer()
     {
@@ -19,13 +19,9 @@ public class Consumer : IDisposable
 
         // Configuring a Dead Letter Exchange using Optional Queue Arguments, not binding the queue to the exchange
         var queueArgs = new ConcurrentDictionary<string, object>();
-        queueArgs.TryAdd("x-dead-letter-exchange", "dead_letter_exchange");
+        queueArgs.TryAdd("x-dead-letter-exchange", DeadLetterExchange);
         queueArgs.TryAdd("x-message-ttl", 10000);
         var queue = _channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
-
-        // Binding the queue to the exchange
-        _channel.ExchangeDeclare(Exchange, ExchangeType.Direct, durable: false, autoDelete: true, arguments: null);
-        _channel.QueueBind(queue: queue.QueueName, exchange: Exchange, routingKey: Queue);
 
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += OnMessageReceived;
