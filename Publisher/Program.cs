@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using RabbitMQ.Client;
 
-
 const string exchange = "ex.messages";
-const string queue = "q.messages";
 
 var factory = new ConnectionFactory
 {
@@ -18,7 +16,7 @@ var body = Encoding.UTF8.GetBytes(message);
 
 channel.BasicPublish(
     exchange: exchange,
-    routingKey: queue,
+    routingKey: "123",
     basicProperties: null,
     body: body);
 

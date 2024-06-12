@@ -24,7 +24,7 @@ public class Consumer : IDisposable
         var queue = channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
         
         channel.ExchangeDeclare(Exchange, ExchangeType.Direct);
-        channel.QueueBind(Queue, Exchange,string.Empty);
+        channel.QueueBind(Queue, Exchange,"123");
         
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += OnMessageReceived;
