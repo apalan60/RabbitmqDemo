@@ -10,7 +10,7 @@ public class Consumer : IDisposable
     private const string Queue = "q.messages";
     private const string Exchange = "ex.messages";
     private const string DeadLetterExchange = "dead_letter_exchange";
-
+    
     private Consumer()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
@@ -23,13 +23,30 @@ public class Consumer : IDisposable
         queueArgs.TryAdd("x-message-ttl", 10000);
         var queue = channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
         
-        channel.ExchangeDeclare(Exchange, ExchangeType.Direct);
+        channel.ExchangeDeclare(Exchange, ExchangeType.Direct, durable: false, autoDelete: true);
         channel.QueueBind(Queue, Exchange,"123");
         
         var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += OnMessageReceived;
-
-        channel.BasicConsume(queue: queue.QueueName, autoAck: true, consumer: consumer);
+        
+        consumer.Received += (sender, ea) =>
+        {
+            var body = ea.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+            Console.WriteLine($" [x] {message}");
+          
+            if (message.StartsWith('R'))
+            {
+                Console.WriteLine("Message rejected");
+                channel.BasicReject(deliveryTag: ea.DeliveryTag, requeue: false);
+            }
+            else
+            {
+                Console.WriteLine("accepting message");
+                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);    
+            }
+        };
+        
+        channel.BasicConsume(queue: queue.QueueName, autoAck: false, consumer: consumer);
     }
 
     public void Dispose() => _connection.Close();
@@ -40,20 +57,5 @@ public class Consumer : IDisposable
         Console.WriteLine(" Press [enter] to exit.");
         Console.ReadLine();
     }
-    
-    private void OnMessageReceived(object? sender, BasicDeliverEventArgs ea)
-    {
-        var body = ea.Body.ToArray();
-        var message = Encoding.UTF8.GetString(body);
-        Console.WriteLine($" [x] {message}");
 
-        // if (message.StartsWith('R'))
-        // {
-        //     _channel.BasicReject(ea.DeliveryTag, false);
-        // }
-        // else
-        // {
-        //     Thread.Sleep(TimeSpan.FromSeconds(11));
-        // }
-    }
 }
