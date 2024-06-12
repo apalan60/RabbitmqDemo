@@ -21,6 +21,7 @@ public class Consumer : IDisposable
         var queueArgs = new ConcurrentDictionary<string, object>();
         queueArgs.TryAdd("x-dead-letter-exchange", DeadLetterExchange);
         queueArgs.TryAdd("x-message-ttl", 10000);
+        queueArgs.TryAdd("x-dead-letter-routing-key", "dlx-routing-key");
         var queue = channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
         
         channel.ExchangeDeclare(Exchange, ExchangeType.Direct, durable: false, autoDelete: true);
@@ -42,6 +43,8 @@ public class Consumer : IDisposable
             else
             {
                 Console.WriteLine("accepting message");
+                // Console.WriteLine("Sleep for 3 seconds");
+                // Thread.Sleep(TimeSpan.FromSeconds(3));
                 channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);    
             }
         };
