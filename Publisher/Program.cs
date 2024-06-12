@@ -12,7 +12,6 @@ var factory = new ConnectionFactory
 using var connection = factory.CreateConnection();
 using var channel = connection.CreateModel();     
 
-//channel.ExchangeDeclare(exchange, ExchangeType.Direct);
 
 var message = GetMessage(args);
 var body = Encoding.UTF8.GetBytes(message);

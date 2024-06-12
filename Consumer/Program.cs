@@ -6,34 +6,33 @@ using RabbitMQ.Client.Events;
 namespace Consumer;
 public class Consumer : IDisposable
 {
-    private readonly IModel _channel;
     private readonly IConnection _connection;
     private const string Queue = "q.messages";
+    private const string Exchange = "ex.messages";
     private const string DeadLetterExchange = "dead_letter_exchange";
 
     private Consumer()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        var channel = _connection.CreateModel();
 
-        // Configuring a Dead Letter Exchange using Optional Queue Arguments, not binding the queue to the exchange
+        // Configuring a Dead Letter Exchange using Optional Queue Arguments
         var queueArgs = new ConcurrentDictionary<string, object>();
         queueArgs.TryAdd("x-dead-letter-exchange", DeadLetterExchange);
         queueArgs.TryAdd("x-message-ttl", 10000);
-        var queue = _channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
-
-        var consumer = new EventingBasicConsumer(_channel);
+        var queue = channel.QueueDeclare(queue: Queue, durable: false, exclusive: false, autoDelete: true, arguments: queueArgs);
+        
+        channel.ExchangeDeclare(Exchange, ExchangeType.Direct);
+        channel.QueueBind(Queue, Exchange,string.Empty);
+        
+        var consumer = new EventingBasicConsumer(channel);
         consumer.Received += OnMessageReceived;
 
-        // Negative acknowledgment
-        _channel.BasicConsume(queue: queue.QueueName, autoAck: false, consumer: consumer);
+        channel.BasicConsume(queue: queue.QueueName, autoAck: true, consumer: consumer);
     }
-    
-    public void Dispose()
-    {
-        _connection.Close();
-    }
+
+    public void Dispose() => _connection.Close();
 
     public static void Main()
     {
@@ -48,13 +47,13 @@ public class Consumer : IDisposable
         var message = Encoding.UTF8.GetString(body);
         Console.WriteLine($" [x] {message}");
 
-        if (message.StartsWith('R'))
-        {
-            _channel.BasicReject(ea.DeliveryTag, false);
-        }
-        else
-        {
-            Thread.Sleep(TimeSpan.FromSeconds(11));
-        }
+        // if (message.StartsWith('R'))
+        // {
+        //     _channel.BasicReject(ea.DeliveryTag, false);
+        // }
+        // else
+        // {
+        //     Thread.Sleep(TimeSpan.FromSeconds(11));
+        // }
     }
 }
